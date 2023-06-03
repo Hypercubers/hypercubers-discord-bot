@@ -20,7 +20,7 @@ const RANDOM_FACTS:[&str;16] = ["The 3^4 has 216 stickers",
 
 pub fn run(_options: &[CommandDataOption]) -> String {
     let mut rng = rand::thread_rng();
-    ("`".to_string() + RANDOM_FACTS[rng.gen_range(0..16)]).to_string() + "`"
+    RANDOM_FACTS[rng.gen_range(0..16)].to_string()
 }
 
 pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicationCommand {

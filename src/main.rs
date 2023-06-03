@@ -14,8 +14,8 @@ struct Handler;
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
-            let content = match command.data.name.as_str() {
-                "randfact" => commands::randfact::run(&command.data.options),
+            let (embed_title, embed_main) =  match command.data.name.as_str() {
+                "randfact" => ("Random Fact".to_string(), commands::randfact::run(&command.data.options)),
                 &_ => todo!(),
             };
 
@@ -23,7 +23,7 @@ impl EventHandler for Handler {
                 .create_interaction_response(&ctx.http, |response| {
                     response
                         .kind(InteractionResponseType::ChannelMessageWithSource)
-                        .interaction_response_data(|message| message.content(content))
+                        .interaction_response_data(|message| message.embed(|e| {e.title(embed_title).field(embed_main, "", false)}))
                 })
                 .await
             {
