@@ -1,14 +1,32 @@
 mod commands;
 use std::env;
 
+use std::time::Duration;
+use tokio::{task, time};
+
 use serenity::async_trait;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
 use serenity::model::id::GuildId;
 use serenity::prelude::*;
 use serenity::framework::standard::{StandardFramework};
+use serenity::model::gateway::Activity;
 
 struct Handler;
+
+use std::{
+    fs::File,
+    io::{prelude::*, BufReader},
+    path::Path,
+};
+
+fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
+    let file = File::open(filename).expect("no such file");
+    let buf = BufReader::new(file);
+    buf.lines()
+        .map(|l| l.expect("Could not parse line"))
+        .collect()
+}
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -49,6 +67,19 @@ impl EventHandler for Handler {
         .await;
 
         println!("I now have the following guild slash commands: {:#?}", commands);
+
+        let lines = lines_from_file("statuses.txt");
+        let num_lines = lines.len();
+        let forever = task::spawn(async move {
+            let mut interval = time::interval(Duration::from_millis(10000));
+            loop {
+                interval.tick().await;
+                let random_val:usize = rand::random::<usize>();
+                ctx.set_activity(Activity::playing(lines[random_val % num_lines].to_string())).await;
+            }
+        });
+    
+        let _ = forever.await;
     }
 }
 
