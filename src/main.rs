@@ -47,6 +47,8 @@ impl EventHandler for Handler {
                 .create_application_command(|command| commands::randfact::register(command))
         })
         .await;
+
+        println!("I now have the following guild slash commands: {:#?}", commands);
     }
 }
 
