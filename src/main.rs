@@ -2,7 +2,6 @@ mod commands;
 use std::env;
 
 use serenity::async_trait;
-//use serenity::model::application::command::Command;
 use serenity::model::application::interaction::{Interaction, InteractionResponseType};
 use serenity::model::gateway::Ready;
 use serenity::model::id::GuildId;
@@ -15,8 +14,6 @@ struct Handler;
 impl EventHandler for Handler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
-            println!("Received command interaction: {:#?}", command);
-
             let content = match command.data.name.as_str() {
                 "randfact" => commands::randfact::run(&command.data.options),
                 &_ => todo!(),
@@ -50,8 +47,6 @@ impl EventHandler for Handler {
                 .create_application_command(|command| commands::randfact::register(command))
         })
         .await;
-
-        println!("I now have the following guild slash commands: {:#?}", commands);
     }
 }
 
@@ -59,18 +54,15 @@ impl EventHandler for Handler {
 async fn main() {
     // Configure the client with your Discord bot token in the environment.
     let token = env::var("DISCORD_TOKEN").expect("Expected a token in the environment");
-    let framework = StandardFramework::new();
+
     // Build our client.
+    let framework = StandardFramework::new();
     let mut client = Client::builder(token, GatewayIntents::empty())
         .event_handler(Handler)
         .framework(framework)
         .await
         .expect("Error creating client");
 
-    // Finally, start a single shard, and start listening to events.
-    //
-    // Shards will automatically attempt to reconnect, and will perform
-    // exponential backoff until it reconnects.
     if let Err(why) = client.start().await {
         println!("Client error: {:?}", why);
     }
