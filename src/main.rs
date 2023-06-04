@@ -34,6 +34,7 @@ impl EventHandler for Handler {
         if let Interaction::ApplicationCommand(command) = interaction {
             let (embed_title, embed_main) =  match command.data.name.as_str() {
                 "randfact" => ("Random Fact".to_string(), commands::randfact::run(&command.data.options)),
+                "scramble" => ("Physical 2^4 Scrambles".to_string(), commands::phys24scram::run(&command.data.options)),
                 &_ => todo!(),
             };
 
@@ -41,7 +42,7 @@ impl EventHandler for Handler {
                 .create_interaction_response(&ctx.http, |response| {
                     response
                         .kind(InteractionResponseType::ChannelMessageWithSource)
-                        .interaction_response_data(|message| message.embed(|e| {e.title(embed_title).field(embed_main, "", false)}))
+                        .interaction_response_data(|message| message.embed(|e| {e.title(embed_title).description(embed_main)}))
                 })
                 .await
             {
@@ -63,6 +64,7 @@ impl EventHandler for Handler {
         let commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
             commands
                 .create_application_command(|command| commands::randfact::register(command))
+                .create_application_command(|command| commands::phys24scram::register(command))
         })
         .await;
 
