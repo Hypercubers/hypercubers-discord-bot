@@ -15,7 +15,8 @@ const RANDOM_FACTS:[&str;16] = ["The 3^4 has 216 stickers",
                 "There are theoretical designs for physical simplex, and many types of hypercuboids",
                 "In 5D, Double RKT lets you manipulate a side like a cube by using RKT to manipulate that side like a tesseract",
                 "The Hall Of Fame for 3^4 solutions was closed on December 7th, 2022 when it reached 500 entries",
-                "There's no OLL parity in 4 dimensions (or higher)","No one has ever done a speedsolve of a 5D puzzle",
+                "There's no OLL parity in 4 dimensions (or higher)",
+                "No one has ever done a speedsolve of a 5D puzzle",
                 "In even dimensions, any sized cube can be checkerboarded, but in odd dimensions only oddxodd sized cubes can be fully checkerboarded"];
 
 pub fn run(_options: &[CommandDataOption]) -> String {
