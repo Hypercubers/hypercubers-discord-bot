@@ -73,7 +73,7 @@ impl EventHandler for Handler {
         let lines = lines_from_file("statuses.txt");
         let num_lines = lines.len();
         let forever = task::spawn(async move {
-            let mut interval = time::interval(Duration::from_millis(10000));
+            let mut interval = time::interval(Duration::from_millis(300000));
             loop {
                 interval.tick().await;
                 let random_val:usize = rand::random::<usize>();
