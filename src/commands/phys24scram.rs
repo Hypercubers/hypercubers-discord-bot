@@ -22,7 +22,7 @@ pub fn run(options: &[CommandDataOption]) -> String {
         for j in 0..*value {
             scram = (scram + j.to_string().as_str()) + ". ";
             let length = 12 + rng.gen_range(0..3) * 2;
-            for i in 0..length {
+            for i in 0..length-1 {
                 if i != 0 {
                     scram += " # "
                 }
