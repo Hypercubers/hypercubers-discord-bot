@@ -80,17 +80,7 @@ impl EventHandler for Handler {
                 let activity_string = &lines[random_val % num_lines];
                 let playing_string = match activity_string.strip_prefix("Playing ") {
                     Some(rest) => rest.to_string(),
-                    None => {
-                        if activity_string.is_char_boundary(1) {
-                            format!(
-                                "around {}{}",
-                                activity_string[..1].to_ascii_lowercase(),
-                                &activity_string[1..],
-                            )
-                        } else {
-                            activity_string.to_string()
-                        }
-                    }
+                    None => format!("| {activity_string}"),
                 };
                 ctx.set_activity(Activity::playing(playing_string)).await;
             }
